@@ -1,5 +1,6 @@
 # mysite
 
+Simple afk fishing automation game / mysite
 
 version 1.0 : (DONE)
 - green floor
