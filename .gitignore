@@ -1,0 +1,42 @@
+# Node.js and npm
+node_modules/
+npm-debug.log
+package-lock.json  # Optional: Include if you prefer Yarn or pnpm lockfiles instead
+
+# Build output
+dist/
+build/
+public/build/  # Common if using Vite or similar with a public folder
+
+# Dependency directories (if you manually include Three.js)
+libs/
+vendor/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Minified or generated files
+*.min.js
+*.map  # Source maps, optional to include if you want them tracked
+
+# Miscellaneous
+coverage/  # Test coverage reports
+test/  # Optional: Exclude if your tests are generated or temporary
