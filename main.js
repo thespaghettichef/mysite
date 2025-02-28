@@ -8,18 +8,17 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
-// Create a flat floor instead of a cube (50x0.1x50 for width, height, depth)
+// Create floor
 const geometry = new THREE.BoxGeometry(50, 0.1, 50);
 const material = new THREE.MeshBasicMaterial({ color: 0x8B0000 });
 const floor = new THREE.Mesh(geometry, material);
-floor.position.y = -1; // Lower it slightly below camera
+floor.position.y = -1;
 scene.add(floor);
 
-// Position camera above the floor
+// Camera setup
 camera.position.set(0, 2, 5);
-camera.lookAt(0, 0, 0);
 
-// Basic movement controls
+// Movement controls
 let moveForward = false;
 let moveBackward = false;
 let moveLeft = false;
@@ -27,6 +26,36 @@ let moveRight = false;
 const velocity = new THREE.Vector3();
 const speed = 0.05;
 
+// Mouse look variables
+let isLocked = false;
+const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+const PI_2 = Math.PI / 2;
+
+// Click to lock pointer
+document.body.addEventListener('click', () => {
+    document.body.requestPointerLock();
+});
+
+document.addEventListener('pointerlockchange', () => {
+    isLocked = document.pointerLockElement === document.body;
+});
+
+document.addEventListener('mousemove', (event) => {
+    if (!isLocked) return;
+
+    const movementX = event.movementX || 0;
+    const movementY = event.movementY || 0;
+
+    euler.setFromQuaternion(camera.quaternion);
+
+    euler.y -= movementX * 0.002;
+    euler.x -= movementY * 0.002;
+    euler.x = Math.max(-PI_2, Math.min(PI_2, euler.x)); // Clamp vertical rotation
+
+    camera.quaternion.setFromEuler(euler);
+});
+
+// Keyboard controls
 document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'w': moveForward = true; break;
@@ -46,19 +75,29 @@ document.addEventListener('keyup', (event) => {
 });
 
 function animate() {
-    // Movement logic
-    velocity.z = 0;
-    velocity.x = 0;
+    if (isLocked) {
+        // Calculate direction based on camera rotation
+        const direction = new THREE.Vector3(0, 0, -1);
+        direction.applyQuaternion(camera.quaternion);
+        direction.y = 0;
+        direction.normalize();
 
-    if (moveForward) velocity.z = -speed;
-    if (moveBackward) velocity.z = speed;
-    if (moveLeft) velocity.x = -speed;
-    if (moveRight) velocity.x = speed;
+        const sideways = new THREE.Vector3();
+        sideways.crossVectors(direction, new THREE.Vector3(0, 1, 0)).normalize();
 
-    camera.position.add(velocity);
+        velocity.set(0, 0, 0);
+        
+        if (moveForward) velocity.add(direction.multiplyScalar(speed));
+        if (moveBackward) velocity.add(direction.multiplyScalar(-speed));
+        if (moveLeft) velocity.add(sideways.multiplyScalar(-speed));
+        if (moveRight) velocity.add(sideways.multiplyScalar(speed));
 
-    // Keep camera at consistent height
-    camera.position.y = 2;
+        camera.position.add(velocity);
+        camera.position.y = 2; // Maintain height
+    }
 
     renderer.render(scene, camera);
 }
+
+// Initial render
+renderer.render(scene, camera);
