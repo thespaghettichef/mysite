@@ -5,12 +5,13 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0xB0E0E6); // sky color (background)
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
 // Create floor
 const geometry = new THREE.BoxGeometry(50, 0.1, 50);
-const material = new THREE.MeshBasicMaterial({ color: 0x8B0000 });
+const material = new THREE.MeshBasicMaterial({ color: 0x228B22 });
 const floor = new THREE.Mesh(geometry, material);
 floor.position.y = -1;
 scene.add(floor);
@@ -24,7 +25,7 @@ let moveBackward = false;
 let moveLeft = false;
 let moveRight = false;
 const velocity = new THREE.Vector3();
-const speed = 0.05;
+const speed = 0.10;
 
 // Mouse look variables
 let isLocked = false;
