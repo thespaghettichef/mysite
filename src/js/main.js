@@ -13,19 +13,19 @@ renderer.setClearColor(0xB0E0E6); // Sky color (background)
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
-// Floor
+// Floor (floor.js)
 const floor = createFloor(scene);
 
 // Camera setup
 camera.position.set(0, 2, 5);
 
-// Player
+// Player (player.js)
 setupPlayer(camera);
 
-// Sun
+// Sun (sun.js)
 createSun(scene);
 
-// Rings
+// Rings (rings.js)
 const { rings, ringLights } = createRings(scene);
 
 function animate() {

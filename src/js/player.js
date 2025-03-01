@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+
+// player movment
 let moveForward = false;
 let moveBackward = false;
 let moveLeft = false;
@@ -11,6 +13,7 @@ let isLocked = false;
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const PI_2 = Math.PI / 2;
 
+ // player jump
 let jumpVelocity = 0;
 const gravity = -0.02;
 const jumpStrength = 0.3;
