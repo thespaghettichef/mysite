@@ -1,6 +1,7 @@
 # mysite
 
 How to run: (commands in order)
+
 npm install
 npm run dev (runs via vite)
 
